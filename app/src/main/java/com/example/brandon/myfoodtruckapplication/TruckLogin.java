@@ -70,8 +70,6 @@ public class TruckLogin extends AppCompatActivity implements View.OnClickListene
                             updateUI(user);
                             Toast.makeText(TruckLogin.this, "Authentication successful.",
                                     Toast.LENGTH_SHORT).show();
-                            mEmailField.setText("");
-                            mPasswordField.setText("");
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -104,6 +102,8 @@ public class TruckLogin extends AppCompatActivity implements View.OnClickListene
         int i = v.getId();
         if (i == R.id.onLoginPressed) {
             signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
+            mEmailField.setText("");
+            mPasswordField.setText("");
         } else if (i == R.id.onRegisterPressed) {
             startActivity(new Intent(this, TruckRegister.class));
         }

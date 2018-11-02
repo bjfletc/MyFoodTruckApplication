@@ -22,6 +22,8 @@ public class TruckDashboard extends AppCompatActivity implements View.OnClickLis
 
         /* Buttons */
         findViewById(R.id.button3).setOnClickListener(this);
+        findViewById(R.id.button6).setOnClickListener(this);
+
 
         // [START initialize_auth]
         // Initialize Firebase Auth
