@@ -11,6 +11,7 @@ public class TruckDashboard extends AppCompatActivity {
     // [START declare_auth]
     private FirebaseAuth mAuth;
     // [END declare_auth]
+    TextView dashboard_Title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,5 +22,7 @@ public class TruckDashboard extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
+        dashboard_Title = findViewById(R.id.textView3);
+        dashboard_Title.setText(mAuth.getCurrentUser().getDisplayName());
     }
 }
