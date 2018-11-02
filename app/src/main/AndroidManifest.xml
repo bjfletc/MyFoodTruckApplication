@@ -25,7 +25,8 @@
         <activity android:name=".TruckRegister" />
         <activity android:name=".TruckDashboard" />
         <activity android:name=".TruckOpen" />
-        <activity android:name=".TruckEdit"></activity>
+        <activity android:name=".TruckEdit" />
+        <activity android:name=".UserRegister"></activity>
     </application>
 
 </manifest>

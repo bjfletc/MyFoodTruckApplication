@@ -43,6 +43,7 @@ public class TruckOpen extends AppCompatActivity implements View.OnClickListener
         /* Buttons */
         findViewById(R.id.Add).setOnClickListener(this);
         findViewById(R.id.Update).setOnClickListener(this);
+        findViewById(R.id.Close).setOnClickListener(this);
 
         address = findViewById(R.id.Address);
 
@@ -97,7 +98,9 @@ public class TruckOpen extends AppCompatActivity implements View.OnClickListener
             mAuth.signOut();
             startActivity(new Intent(this, MainActivity.class));
         } else if (i == R.id.Update) {
-
+            UpdateData();
+            startActivity(new Intent(this, TruckDashboard.class));
+            address.setText("");
         }
     }
 }
