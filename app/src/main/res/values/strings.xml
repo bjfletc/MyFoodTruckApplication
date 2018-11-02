@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Food Truck</string>
+    <string name="truck_owner_activity">Food Truck - Owner</string>
+    <string name="customer_activity">Food Truck - Customer</string>
+    <string name="customer">Customer</string>
+    <string name="truck_owner">Truck Owner</string>
+    <string name="welcome">Welcome</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="email">E-mail</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="truck_dashboard">Truck Dashboard</string>
+    <string name="open_and_update">Open/Update</string>
+    <string name="edit_info">Edit/Info</string>
+    <string name="close">Close</string>
+</resources>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "133986244877",
+    "firebase_url": "https://myfoodtruckapplication.firebaseio.com",
+    "project_id": "myfoodtruckapplication",
+    "storage_bucket": "myfoodtruckapplication.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:133986244877:android:8ab31d943c86670a",
+        "android_client_info": {
+          "package_name": "com.example.brandon.myfoodtruckapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "133986244877-bsm3huotu35clm3t596jsnsj9s56iobi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.brandon.myfoodtruckapplication",
+            "certificate_hash": "69b428c5ded8e1955ed180fa089b5c589ee4e6e1"
+          }
+        },
+        {
+          "client_id": "133986244877-da0vqr9f22jcti7d1kgcqrrhaga16sf0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVhGLm0v_ya-DbzRouoQViBx-T9cSshaM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "133986244877-da0vqr9f22jcti7d1kgcqrrhaga16sf0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
