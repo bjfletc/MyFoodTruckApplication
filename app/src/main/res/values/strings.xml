@@ -18,4 +18,8 @@
     <string name="close">Close</string>
     <string name="enter_address">Enter Address</string>
     <string name="add">Add</string>
+    <string name="edit">Edit Info</string>
+    <string name="truck_name">Truck Name</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="update_bio">Update Bio</string>
 </resources>
