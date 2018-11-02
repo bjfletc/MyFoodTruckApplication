@@ -4,13 +4,34 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 public class UserDashboard extends AppCompatActivity implements View.OnClickListener {
+
+    // [START declare_auth]
+    private FirebaseAuth mAuth;
+    // [END declare_auth]
+    TextView dashboard_Title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_dashboard);
+
+        /* Buttons */
+        findViewById(R.id.button7).setOnClickListener(this);
+        findViewById(R.id.button8).setOnClickListener(this);
+        findViewById(R.id.button10).setOnClickListener(this);
+
+
+        // [START initialize_auth]
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+        // [END initialize_auth]
+        dashboard_Title = findViewById(R.id.textView2);
+        dashboard_Title.setText(mAuth.getCurrentUser().getDisplayName());
     }
 
     @Override
@@ -21,7 +42,8 @@ public class UserDashboard extends AppCompatActivity implements View.OnClickList
         } else if (i == R.id.button8) {
             // Review
         } else if (i == R.id.button10) {
-            // Sign Out and Close
+            mAuth.signOut();
+            startActivity(new Intent(this, MainActivity.class));
         }
     }
 }
