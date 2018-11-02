@@ -26,7 +26,10 @@
         <activity android:name=".TruckDashboard" />
         <activity android:name=".TruckOpen" />
         <activity android:name=".TruckEdit" />
-        <activity android:name=".UserRegister"></activity>
+        <activity
+            android:name=".UserRegister"
+            android:label="@string/user_register" />
+        <activity android:name=".UserDashboard"></activity>
     </application>
 
 </manifest>

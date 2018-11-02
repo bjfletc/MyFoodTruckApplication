@@ -91,7 +91,7 @@ public class UserLogin extends AppCompatActivity implements View.OnClickListener
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            startActivity(new Intent(this, TruckDashboard.class));
+            startActivity(new Intent(this, UserDashboard.class));
         } else {
             System.out.println("I don't know...");
         }

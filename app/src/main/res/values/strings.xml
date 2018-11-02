@@ -23,4 +23,7 @@
     <string name="phone_number">Phone Number</string>
     <string name="update_bio">Update Bio</string>
     <string name="update">Update</string>
+    <string name="user_register">Customer Registration</string>
+    <string name="find">Find Food Truck</string>
+    <string name="review">Review</string>
 </resources>
