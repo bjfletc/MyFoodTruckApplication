@@ -22,4 +22,5 @@
     <string name="truck_name">Truck Name</string>
     <string name="phone_number">Phone Number</string>
     <string name="update_bio">Update Bio</string>
+    <string name="update">Update</string>
 </resources>

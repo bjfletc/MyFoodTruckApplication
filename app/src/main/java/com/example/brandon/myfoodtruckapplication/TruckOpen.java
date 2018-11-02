@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -22,6 +23,9 @@ public class TruckOpen extends AppCompatActivity implements View.OnClickListener
     private static final String NAME_KEY = "Name";
     private static final String EMAIL_KEY = "Email";
     private static final String ADDRESS_KEY = "Address";
+    private static final String PHONE_KEY = "Phone Number";
+    private static final String TRUCK_NAME_KEY = "Truck Name";
+
     EditText address;
 
     FirebaseFirestore db;
@@ -38,6 +42,7 @@ public class TruckOpen extends AppCompatActivity implements View.OnClickListener
 
         /* Buttons */
         findViewById(R.id.Add).setOnClickListener(this);
+        findViewById(R.id.Update).setOnClickListener(this);
 
         address = findViewById(R.id.Address);
 
@@ -49,6 +54,8 @@ public class TruckOpen extends AppCompatActivity implements View.OnClickListener
         newTruck.put(NAME_KEY, mAuth.getCurrentUser().getDisplayName());
         newTruck.put(EMAIL_KEY, mAuth.getCurrentUser().getEmail());
         newTruck.put(ADDRESS_KEY, address.getText().toString());
+        newTruck.put(PHONE_KEY, "");
+        newTruck.put(TRUCK_NAME_KEY, "");
         db.collection("TruckDatabase").document("TruckOwner").set(newTruck)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -67,6 +74,18 @@ public class TruckOpen extends AppCompatActivity implements View.OnClickListener
                 });
     }
 
+    private void UpdateData() {
+        DocumentReference truck = db.collection("TruckDatabase").document("TruckOwner");
+        truck.update(ADDRESS_KEY, address.getText().toString())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(TruckOpen.this, "Updated Successfully",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
     @Override
     public void onClick(View v) {
         int i = v.getId();
@@ -77,6 +96,8 @@ public class TruckOpen extends AppCompatActivity implements View.OnClickListener
         } else if (i == R.id.Close) {
             mAuth.signOut();
             startActivity(new Intent(this, MainActivity.class));
+        } else if (i == R.id.Update) {
+
         }
     }
 }
