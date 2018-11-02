@@ -38,7 +38,7 @@ public class UserDashboard extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.button7) {
-            startActivity(new Intent(this, UserLogin.class));
+            startActivity(new Intent(this, MapsActivity.class));
         } else if (i == R.id.button8) {
             // Review
         } else if (i == R.id.button10) {
