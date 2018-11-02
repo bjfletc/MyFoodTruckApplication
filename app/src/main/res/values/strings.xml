@@ -16,4 +16,6 @@
     <string name="open_and_update">Open/Update</string>
     <string name="edit_info">Edit/Info</string>
     <string name="close">Close</string>
+    <string name="enter_address">Enter Address</string>
+    <string name="add">Add</string>
 </resources>

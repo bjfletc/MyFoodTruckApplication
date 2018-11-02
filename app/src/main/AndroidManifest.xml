@@ -23,7 +23,8 @@
             android:name=".UserLogin"
             android:label="@string/customer_activity" />
         <activity android:name=".TruckRegister" />
-        <activity android:name=".TruckDashboard"></activity>
+        <activity android:name=".TruckDashboard" />
+        <activity android:name=".TruckOpen"></activity>
     </application>
 
 </manifest>
