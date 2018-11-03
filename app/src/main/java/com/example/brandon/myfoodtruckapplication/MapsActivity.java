@@ -1,5 +1,10 @@
 package com.example.brandon.myfoodtruckapplication;
 
+import android.content.Context;
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -21,10 +26,12 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.List;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private String address;
+    private String addressForMarker;
 
     FirebaseFirestore db;
     FirebaseFirestoreSettings settings;
@@ -60,12 +67,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
+
         ReadSingleTruck();
+        // Need to Wait for DB to Get Address Before Continuing
+        /*
+        System.out.println(addressForMarker);
+        LatLng address = getLocationFromAddress(this, addressForMarker);
+        mMap.addMarker(new MarkerOptions().position(address).title("Food Truck"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(address));
+        */
     }
 
 
@@ -78,9 +94,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     DocumentSnapshot doc = task.getResult();
                     StringBuilder fields = new StringBuilder("");
                     fields.append("Address: ").append(doc.get("Address"));
-                    address = fields.toString();
-                    address = address.substring(8);
-                    System.out.println(address);
+                    addressForMarker = fields.toString();
+                    addressForMarker = addressForMarker.substring(8);
+                    System.out.println(addressForMarker);
                     // fields.append(" Truck Name: ").append(doc.get("Truck Name"))
                 }
             }
@@ -90,6 +106,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     public void onFailure(@NonNull Exception e) {
                     }
                 });
+    }
+
+    public LatLng getLocationFromAddress(Context context, String strAddress)
+    {
+        Geocoder coder= new Geocoder(context);
+        List<Address> address;
+        LatLng p1 = null;
+
+        try
+        {
+            address = coder.getFromLocationName(strAddress, 5);
+            if(address==null)
+            {
+                return null;
+            }
+            Address location = address.get(0);
+            location.getLatitude();
+            location.getLongitude();
+
+            p1 = new LatLng(location.getLatitude(), location.getLongitude());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return p1;
+
     }
 
 }
