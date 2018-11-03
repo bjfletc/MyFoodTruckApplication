@@ -23,6 +23,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -69,22 +70,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng tulsa = new LatLng(36.1636, -95.9879);
+        mMap.addMarker(new MarkerOptions().position(tulsa).title("Marker in Tulsa"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(tulsa, 10));
 
-
-        ReadSingleTruck();
-        // Need to Wait for DB to Get Address Before Continuing
-        /*
-        System.out.println(addressForMarker);
-        LatLng address = getLocationFromAddress(this, addressForMarker);
-        mMap.addMarker(new MarkerOptions().position(address).title("Food Truck"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(address));
-        */
+        DocumentReference user = db.collection("TruckDatabase").document("TruckOwner");
+        user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    DocumentSnapshot doc = task.getResult();
+                    StringBuilder fields = new StringBuilder("");
+                    fields.append("Address: ").append(doc.get("Address"));
+                    addressForMarker = fields.toString();
+                    addressForMarker = addressForMarker.substring(8);
+                    System.out.println(addressForMarker);
+                    // fields.append(" Truck Name: ").append(doc.get("Truck Name"))
+                }
+                System.out.println("FLAG BEFORE GEOPOINT");
+                GeoPoint pointFromAddress = getLocationFromAddress(addressForMarker);
+                System.out.println("FLAG AFTER GEOPOINT");
+                Double lat = pointFromAddress.getLatitude();
+                System.out.println("FLAG AFTER LAT INIT");
+                System.out.println(Double.toString(lat));
+                Double lng = pointFromAddress.getLongitude();
+                System.out.println(Double.toString(lng));
+                mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title("The Taco King"));
+                // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 10));
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                });
     }
 
-
+    /*
     private void ReadSingleTruck() {
         DocumentReference user = db.collection("TruckDatabase").document("TruckOwner");
         user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -107,32 +129,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 });
     }
+    */
 
-    public LatLng getLocationFromAddress(Context context, String strAddress)
-    {
-        Geocoder coder= new Geocoder(context);
+    public GeoPoint getLocationFromAddress(String strAddress){
+
+        Geocoder coder = new Geocoder(this);
         List<Address> address;
-        LatLng p1 = null;
+        GeoPoint p1 = null;
 
-        try
-        {
-            address = coder.getFromLocationName(strAddress, 5);
-            if(address==null)
-            {
+        try {
+            address = coder.getFromLocationName(strAddress,5);
+            if (address==null) {
                 return null;
             }
-            Address location = address.get(0);
+            Address location=address.get(0);
             location.getLatitude();
+            System.out.println(Double.toString(location.getLatitude()));
             location.getLongitude();
+            System.out.println(Double.toString(location.getLongitude()));
 
-            p1 = new LatLng(location.getLatitude(), location.getLongitude());
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return p1;
+            p1 = new GeoPoint((double) (location.getLatitude()),
+                    (double) (location.getLongitude()));
 
+            return p1;
+        } catch (java.io.IOException e) {
+            return null;
+        }
     }
 
 }
