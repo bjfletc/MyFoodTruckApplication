@@ -14,6 +14,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,12 +28,18 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private String addressForMarker;
+    private String tmpTruckName;
+    ArrayList<String> addresses = new ArrayList<String>();
+    ArrayList<String> truckNames = new ArrayList<String>();
+    private MarkerOptions options = new MarkerOptions();
+    private ArrayList<LatLng> latlngs = new ArrayList<>();
 
     FirebaseFirestore db;
     FirebaseFirestoreSettings settings;
@@ -71,65 +78,64 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Add a marker in Sydney and move the camera
         LatLng tulsa = new LatLng(36.1636, -95.9879);
-        mMap.addMarker(new MarkerOptions().position(tulsa).title("Marker in Tulsa"));
+        mMap.addMarker(new MarkerOptions().position(tulsa).title("OSU Tulsa").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(tulsa, 10));
 
-        DocumentReference user = db.collection("TruckDatabase").document("TruckOwner");
-        user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        /* Attempt to Get All Food Trucks */
+        Task user = db.collection("TruckDatabase").get();
+        user.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-                    DocumentSnapshot doc = task.getResult();
-                    StringBuilder fields = new StringBuilder("");
-                    fields.append("Address: ").append(doc.get("Address"));
-                    addressForMarker = fields.toString();
-                    addressForMarker = addressForMarker.substring(8);
-                    System.out.println(addressForMarker);
-                    // fields.append(" Truck Name: ").append(doc.get("Truck Name"))
-                }
-                System.out.println("FLAG BEFORE GEOPOINT");
-                GeoPoint pointFromAddress = getLocationFromAddress(addressForMarker);
-                System.out.println("FLAG AFTER GEOPOINT");
-                Double lat = pointFromAddress.getLatitude();
-                System.out.println("FLAG AFTER LAT INIT");
-                System.out.println(Double.toString(lat));
-                Double lng = pointFromAddress.getLongitude();
-                System.out.println(Double.toString(lng));
-                mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title("The Taco King"));
-                // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 10));
-            }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                    }
-                });
-    }
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
 
-    /*
-    private void ReadSingleTruck() {
-        DocumentReference user = db.collection("TruckDatabase").document("TruckOwner");
-        user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-                    DocumentSnapshot doc = task.getResult();
-                    StringBuilder fields = new StringBuilder("");
-                    fields.append("Address: ").append(doc.get("Address"));
-                    addressForMarker = fields.toString();
-                    addressForMarker = addressForMarker.substring(8);
-                    System.out.println(addressForMarker);
-                    // fields.append(" Truck Name: ").append(doc.get("Truck Name"))
+                    for (DocumentSnapshot doc : myListOfDocuments) {
+                        StringBuilder fields = new StringBuilder("");
+                        StringBuilder trucks = new StringBuilder("");
+                        fields.append("Address: ").append(doc.get("Address"));
+                        trucks.append("Truck Name: ").append(doc.get("Truck Name"));
+                        addressForMarker = fields.toString();
+                        addressForMarker = addressForMarker.substring(8);
+                        addresses.add(addressForMarker);
+                        tmpTruckName = trucks.toString();
+                        tmpTruckName = tmpTruckName.substring(11);
+                        truckNames.add(tmpTruckName);
+                        // fields.append(" Truck Name: ").append(doc.get("Truck Name"))
+                    }
+                    /*
+                        // COMPLETED (4) Use the static ToyBox.getToyNames method and store the names in a String array
+                        String[] toyNames = ToyBox.getToyNames();
+
+                        // COMPLETED   (5) Loop through each toy and append the name to the TextView (add \n for spacing)
+                        for (String toyName : toyNames) {
+                            mToysListTextView.append(toyName + "\n\n\n");
+                        }
+
+                     */
+
+                }
+                /*
+                    Iterate through and generate latlngs out of my addresses from FireStore
+                 */
+                for (String add : addresses) {
+                    GeoPoint pointFromAddress = getLocationFromAddress(add);
+                    Double lat = pointFromAddress.getLatitude();
+                    Double lng = pointFromAddress.getLongitude();
+                    latlngs.add(new LatLng(lat, lng));
+                }
+
+                /*
+                    Iterate through latlngs and display food trucks on map.
+                 */
+                for (int i = 0; i < latlngs.size(); i++) {
+                    options.position(latlngs.get(i));
+                    options.title(truckNames.get(i));
+                    options.snippet("someDesc");
+                    mMap.addMarker(options);
                 }
             }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                    }
-                });
+        });
     }
-    */
 
     public GeoPoint getLocationFromAddress(String strAddress){
 

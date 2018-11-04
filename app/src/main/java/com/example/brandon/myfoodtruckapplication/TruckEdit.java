@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -25,6 +26,8 @@ public class TruckEdit extends AppCompatActivity implements View.OnClickListener
     EditText email;
 
     FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +45,12 @@ public class TruckEdit extends AppCompatActivity implements View.OnClickListener
         email = findViewById(R.id.editTextEmail);
 
         db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+
     }
 
     private void UpdateData() {
-        DocumentReference truck = db.collection("TruckDatabase").document("TruckOwner");
+        DocumentReference truck = db.collection("TruckDatabase").document(mAuth.getCurrentUser().getDisplayName());
         truck.update(NAME_KEY, (firstName.getText().toString() + " " + lastName.getText().toString()));
         truck.update(EMAIL_KEY, email.getText().toString());
         truck.update(PHONE_KEY, phoneNumber.getText().toString());

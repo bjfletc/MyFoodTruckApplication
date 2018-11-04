@@ -57,7 +57,7 @@ public class TruckOpen extends AppCompatActivity implements View.OnClickListener
         newTruck.put(ADDRESS_KEY, address.getText().toString());
         newTruck.put(PHONE_KEY, "");
         newTruck.put(TRUCK_NAME_KEY, "");
-        db.collection("TruckDatabase").document("TruckOwner").set(newTruck)
+        db.collection("TruckDatabase").document(mAuth.getCurrentUser().getDisplayName()).set(newTruck)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

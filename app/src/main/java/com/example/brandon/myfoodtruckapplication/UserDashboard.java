@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -11,6 +12,7 @@ public class UserDashboard extends AppCompatActivity implements View.OnClickList
 
     // [START declare_auth]
     private FirebaseAuth mAuth;
+    TextView dashboard_Title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,8 @@ public class UserDashboard extends AppCompatActivity implements View.OnClickList
         // [START initialize_auth]
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        dashboard_Title = findViewById(R.id.textView2);
+        dashboard_Title.setText(mAuth.getCurrentUser().getDisplayName());
     }
 
     @Override
