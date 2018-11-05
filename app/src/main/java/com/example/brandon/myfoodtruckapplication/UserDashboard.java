@@ -38,7 +38,7 @@ public class UserDashboard extends AppCompatActivity implements View.OnClickList
         if (i == R.id.button7) {
             startActivity(new Intent(this, MapsActivity.class));
         } else if (i == R.id.button8) {
-            // Review
+            startActivity(new Intent(this, UserReview.class));
         } else if (i == R.id.button10) {
             mAuth.signOut();
             startActivity(new Intent(this, MainActivity.class));
