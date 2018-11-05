@@ -63,10 +63,14 @@ public class UserRegister extends AppCompatActivity implements View.OnClickListe
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
+                            Toast.makeText(UserRegister.this, "Registration Successful.",
+                                    Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             addUserNameToUser(user);
 
                             // updateUI(user);
+                            startActivity(new Intent(UserRegister.this, UserLogin.class));
+
 
 
                         } else {
@@ -104,7 +108,6 @@ public class UserRegister extends AppCompatActivity implements View.OnClickListe
         int i = v.getId();
         if (i == R.id.register) {
             createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
-            startActivity(new Intent(this, UserLogin.class));
         }
     }
 }

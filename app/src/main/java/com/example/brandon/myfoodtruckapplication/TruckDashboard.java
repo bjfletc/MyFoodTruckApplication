@@ -7,13 +7,12 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class TruckDashboard extends AppCompatActivity implements View.OnClickListener {
 
-    // [START declare_auth]
-    private FirebaseAuth mAuth;
-    // [END declare_auth]
     TextView dashboard_Title;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +27,16 @@ public class TruckDashboard extends AppCompatActivity implements View.OnClickLis
 
         // [START initialize_auth]
         // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
         dashboard_Title = findViewById(R.id.textView3);
-        dashboard_Title.setText(mAuth.getCurrentUser().getDisplayName());
+        // dashboard_Title.setText(user.getDisplayName());
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // Name, email address, and profile photo Url
+            String name = user.getDisplayName();
+            System.out.println("User's Name: " + name);
+            dashboard_Title.setText(name);
+        }
     }
 
     @Override
@@ -42,7 +47,6 @@ public class TruckDashboard extends AppCompatActivity implements View.OnClickLis
         } else if (i == R.id.button5) {
             startActivity(new Intent(this, TruckEdit.class));
         } else if (i == R.id.button6) {
-            mAuth.signOut();
             startActivity(new Intent(this, MainActivity.class));
         }
     }

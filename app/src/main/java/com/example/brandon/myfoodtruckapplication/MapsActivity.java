@@ -76,10 +76,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
 
-        // Add a marker in Sydney and move the camera
+        // Add a marker in Tulsa and move the camera
         LatLng tulsa = new LatLng(36.1636, -95.9879);
         mMap.addMarker(new MarkerOptions().position(tulsa).title("OSU Tulsa").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(tulsa, 10));
+        // Add a marker in Stillwater
+        LatLng stillwater = new LatLng(36.1270, -97.0737);
+        mMap.addMarker(new MarkerOptions().position(stillwater).title("Oklahoma State University").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
 
         /* Attempt to Get All Food Trucks */
         Task user = db.collection("TruckDatabase").get();

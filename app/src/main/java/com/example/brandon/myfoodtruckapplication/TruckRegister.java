@@ -65,10 +65,13 @@ public class TruckRegister extends AppCompatActivity implements View.OnClickList
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
+                            Toast.makeText(TruckRegister.this, "Registration Successful.",
+                                    Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             addUserNameToUser(user);
 
                             // updateUI(user);
+                            startActivity(new Intent(TruckRegister.this, TruckLogin.class));
 
 
                         } else {
@@ -77,6 +80,7 @@ public class TruckRegister extends AppCompatActivity implements View.OnClickList
                             Toast.makeText(TruckRegister.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             // updateUI(null);
+                            Log.e(TAG, "onComplete: Failed=" + task.getException().getMessage());
                         }
                     }
                 });
@@ -101,12 +105,14 @@ public class TruckRegister extends AppCompatActivity implements View.OnClickList
                 });
     }
 
+
+
     @Override
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.register) {
             createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
-            startActivity(new Intent(this, TruckLogin.class));
+            // startActivity(new Intent(this, TruckLogin.class));
         }
     }
 }
