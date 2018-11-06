@@ -20,8 +20,10 @@ import java.util.List;
 
 public class UserReview extends AppCompatActivity {
 
+    private static final String TRUCK_NAME_KEY = "Truck Name";
+    private static final String REVIEW_KEY = "Review";
+
     ArrayList<String> truckNames = new ArrayList<String>();
-    private String addressForMarker;
     private String tmpTruckName;
     private Spinner truckSpinner;
 
@@ -52,13 +54,13 @@ public class UserReview extends AppCompatActivity {
                         trucks.append("Truck Name: ").append(doc.get("Truck Name"));
                         tmpTruckName = trucks.toString();
                         tmpTruckName = tmpTruckName.substring(11);
+                        System.out.println(tmpTruckName);
                         truckNames.add(tmpTruckName);
                     }
+                    addItemsOnTruckSpinner();
                 }
             }
         });
-
-        addItemsOnTruckSpinner();
     }
 
     // add items into spinner dynamically
