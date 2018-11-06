@@ -2,6 +2,7 @@ package com.example.brandon.myfoodtruckapplication;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -92,6 +93,20 @@ public class UserReview extends AppCompatActivity implements View.OnClickListene
         truckSpinner.setAdapter(dataAdapter);
     }
 
+    private void shareText(String textToShare) {
+        String mimeType = "text/plain";
+
+        String title = "MyFoodTruckApplication Review";
+
+        ShareCompat.IntentBuilder
+                /* The from method specifies the Context from which this share is coming from */
+                .from(this)
+                .setType(mimeType)
+                .setChooserTitle(title)
+                .setText(textToShare)
+                .startChooser();
+    }
+
     @Override
     public void onClick(View v) {
         int i = v.getId();
@@ -99,6 +114,13 @@ public class UserReview extends AppCompatActivity implements View.OnClickListene
             startActivity(new Intent(this, UserDashboard.class));
         } else if (i == R.id.share) {
             System.out.println("Time to Implement Share...");
+
+            String selectedFoodTruckToReview = String.valueOf(truckSpinner.getSelectedItem());
+            String reviewOfSelectedFoodTruck = review.getText().toString();
+
+            String textThatYouWantToShare = selectedFoodTruckToReview + " : " + reviewOfSelectedFoodTruck;
+
+            shareText(textThatYouWantToShare);
         }
     }
 
