@@ -1,14 +1,18 @@
 package com.example.brandon.myfoodtruckapplication;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -18,10 +22,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserReview extends AppCompatActivity {
+public class UserReview extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TRUCK_NAME_KEY = "Truck Name";
     private static final String REVIEW_KEY = "Review";
+
+    EditText review;
+    private FirebaseAuth mAuth;
 
     ArrayList<String> truckNames = new ArrayList<String>();
     private String tmpTruckName;
@@ -40,6 +47,12 @@ public class UserReview extends AppCompatActivity {
                 .setTimestampsInSnapshotsEnabled(true)
                 .build();
         db.setFirestoreSettings(settings);
+
+        /* Buttons */
+        findViewById(R.id.button12).setOnClickListener(this);
+        findViewById(R.id.share).setOnClickListener(this);
+
+        review = findViewById(R.id.review);
 
         /* Attempt to Get All Food Trucks */
         Task user = db.collection("TruckDatabase").get();
@@ -77,6 +90,16 @@ public class UserReview extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         truckSpinner.setAdapter(dataAdapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+        int i = v.getId();
+        if (i == R.id.button12) {
+            startActivity(new Intent(this, UserDashboard.class));
+        } else if (i == R.id.share) {
+            System.out.println("Time to Implement Share...");
+        }
     }
 
 }
