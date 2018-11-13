@@ -5,15 +5,21 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -21,12 +27,15 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserReview extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TRUCK_NAME_KEY = "Truck Name";
     private static final String REVIEW_KEY = "Review";
+
 
     EditText review;
     private FirebaseAuth mAuth;
@@ -48,6 +57,8 @@ public class UserReview extends AppCompatActivity implements View.OnClickListene
                 .setTimestampsInSnapshotsEnabled(true)
                 .build();
         db.setFirestoreSettings(settings);
+
+        mAuth = FirebaseAuth.getInstance();
 
         /* Buttons */
         findViewById(R.id.button12).setOnClickListener(this);
@@ -75,6 +86,28 @@ public class UserReview extends AppCompatActivity implements View.OnClickListene
                 }
             }
         });
+    }
+
+    private void addNewRreview() {
+        Map<String, Object> newReview = new HashMap<>();
+        newReview.put(TRUCK_NAME_KEY, String.valueOf(truckSpinner.getSelectedItem()));
+        newReview.put(REVIEW_KEY, review.getText().toString());
+        db.collection("ReviewDatabase").document(mAuth.getCurrentUser().getDisplayName()).set(newReview)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(UserReview.this, "Review Registered to Map Description",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(UserReview.this, "ERROR" + e.toString(),
+                                Toast.LENGTH_SHORT).show();
+                        Log.d("TAG", e.toString());
+                    }
+                });
     }
 
     // add items into spinner dynamically
@@ -111,6 +144,7 @@ public class UserReview extends AppCompatActivity implements View.OnClickListene
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.button12) {
+            addNewRreview();
             startActivity(new Intent(this, UserDashboard.class));
         } else if (i == R.id.share) {
             System.out.println("Time to Implement Share...");

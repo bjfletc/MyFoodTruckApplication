@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,6 +41,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ArrayList<String> truckNames = new ArrayList<String>();
     private MarkerOptions options = new MarkerOptions();
     private ArrayList<LatLng> latlngs = new ArrayList<>();
+    private FirebaseAuth mAuth;
 
     FirebaseFirestore db;
     FirebaseFirestoreSettings settings;
@@ -54,6 +56,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .setTimestampsInSnapshotsEnabled(true)
                 .build();
         db.setFirestoreSettings(settings);
+
+        mAuth = FirebaseAuth.getInstance();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -106,16 +110,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         truckNames.add(tmpTruckName);
                         // fields.append(" Truck Name: ").append(doc.get("Truck Name"))
                     }
-                    /*
-                        // COMPLETED (4) Use the static ToyBox.getToyNames method and store the names in a String array
-                        String[] toyNames = ToyBox.getToyNames();
-
-                        // COMPLETED   (5) Loop through each toy and append the name to the TextView (add \n for spacing)
-                        for (String toyName : toyNames) {
-                            mToysListTextView.append(toyName + "\n\n\n");
-                        }
-
-                     */
 
                 }
                 /*
