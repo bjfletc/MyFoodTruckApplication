@@ -100,14 +100,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     for (DocumentSnapshot doc : myListOfDocuments) {
                         StringBuilder fields = new StringBuilder("");
                         StringBuilder trucks = new StringBuilder("");
-                        fields.append("Address: ").append(doc.get("Address"));
-                        trucks.append("Truck Name: ").append(doc.get("Truck Name"));
-                        addressForMarker = fields.toString();
-                        addressForMarker = addressForMarker.substring(8);
-                        addresses.add(addressForMarker);
-                        tmpTruckName = trucks.toString();
-                        tmpTruckName = tmpTruckName.substring(11);
-                        truckNames.add(tmpTruckName);
+                        // this if now fixes the bug if someone does not add an address or truck name!
+                        if (doc.get("Address") != "" && doc.get("Truck Name") != "") {
+                            // System.out.println(doc.get("Truck Name:").toString() + "");
+                            fields.append("Address: ").append(doc.get("Address"));
+                            trucks.append("Truck Name: ").append(doc.get("Truck Name"));
+                            addressForMarker = fields.toString();
+                            addressForMarker = addressForMarker.substring(8);
+                            addresses.add(addressForMarker);
+                            tmpTruckName = trucks.toString();
+                            tmpTruckName = tmpTruckName.substring(11);
+                            truckNames.add(tmpTruckName);
+                        } else {
+                            System.out.println("Either the truck has no address or no name... skip and proceed");
+                            continue;
+                        }
+
                         // fields.append(" Truck Name: ").append(doc.get("Truck Name"))
                     }
 
