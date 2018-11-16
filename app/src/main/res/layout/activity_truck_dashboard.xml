@@ -79,6 +79,18 @@
         android:id="@+id/linearLayout5">
 
         <Button
+            android:id="@+id/button7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:text="View Food Trucks"
+            android:textColor="@android:color/black"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="132dp"
+
+            />
+
+        <Button
             android:id="@+id/button3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

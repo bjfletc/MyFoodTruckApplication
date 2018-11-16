@@ -23,6 +23,7 @@ public class TruckDashboard extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.button3).setOnClickListener(this);
         findViewById(R.id.button5).setOnClickListener(this);
         findViewById(R.id.button6).setOnClickListener(this);
+        findViewById(R.id.button7).setOnClickListener(this);
 
 
         // [START initialize_auth]
@@ -48,6 +49,8 @@ public class TruckDashboard extends AppCompatActivity implements View.OnClickLis
             startActivity(new Intent(this, TruckEdit.class));
         } else if (i == R.id.button6) {
             startActivity(new Intent(this, MainActivity.class));
+        } else if (i == R.id.button7) {
+            startActivity(new Intent(this, MapsActivity.class));
         }
     }
 }
