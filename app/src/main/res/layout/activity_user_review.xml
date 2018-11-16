@@ -61,6 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.39"
             android:textAlignment="center"
+            android:hint="Write a review here..."
             android:textColor="@android:color/black"
             android:textSize="18sp"
             android:textStyle="bold" />

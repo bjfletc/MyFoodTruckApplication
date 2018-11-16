@@ -44,6 +44,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:textColor="@android:color/black"
+            android:hint="Enter an addres here..."
             android:inputType="text"
             android:layout_weight="0.13" />
 

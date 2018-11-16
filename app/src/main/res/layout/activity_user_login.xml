@@ -24,6 +24,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="email@email.com"
             android:textColor="@android:color/black"
             android:id="@+id/userInput" />
 
@@ -40,6 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
+            android:hint="Password1"
             android:id="@+id/passInput"
             android:inputType="textPassword"/>
 
