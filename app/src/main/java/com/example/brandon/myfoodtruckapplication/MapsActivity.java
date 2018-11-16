@@ -16,6 +16,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -37,8 +38,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private String addressForMarker;
     private String tmpTruckName;
+    private String reviews;
+    private String reviewedTruck;
     ArrayList<String> addresses = new ArrayList<String>();
     ArrayList<String> truckNames = new ArrayList<String>();
+    ArrayList<Marker> mapMarkers = new ArrayList<>();
+
+    ArrayList<String> reviewsOfFoodTrucks = new ArrayList<String>();
+    ArrayList<String> truckNamesReviewed = new ArrayList<String>();
     private MarkerOptions options = new MarkerOptions();
     private ArrayList<LatLng> latlngs = new ArrayList<>();
     private FirebaseAuth mAuth;
@@ -58,6 +65,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         db.setFirestoreSettings(settings);
 
         mAuth = FirebaseAuth.getInstance();
+
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -88,13 +96,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng stillwater = new LatLng(36.1270, -97.0737);
         mMap.addMarker(new MarkerOptions().position(stillwater).title("Oklahoma State University").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 
-
         /* Attempt to Get All Food Trucks */
         Task user = db.collection("TruckDatabase").get();
         user.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
+
                     List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
 
                     for (DocumentSnapshot doc : myListOfDocuments) {
@@ -120,6 +128,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
 
                 }
+
                 /*
                     Iterate through and generate latlngs out of my addresses from FireStore
                  */
@@ -133,12 +142,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 /*
                     Iterate through latlngs and display food trucks on map.
                  */
+
                 for (int i = 0; i < latlngs.size(); i++) {
                     options.position(latlngs.get(i));
                     options.title(truckNames.get(i));
-                    options.snippet("someDesc");
-                    mMap.addMarker(options);
+                    mapMarkers.add(mMap.addMarker(options));
+                    System.out.println(mMap.addMarker(options).getTitle());
                 }
+
+                getReviewsFromDatabse();
             }
         });
     }
@@ -167,6 +179,53 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (java.io.IOException e) {
             return null;
         }
+    }
+
+    public void getReviewsFromDatabse() {
+        /* Attempt to Get All Food Trucks */
+        Task review = db.collection("ReviewDatabase").get();
+        review.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
+
+                    for (DocumentSnapshot doc : myListOfDocuments) {
+                        StringBuilder tmpReviews = new StringBuilder("");
+                        StringBuilder tmpTrucks = new StringBuilder("");
+                        // this if now fixes the bug if someone does not add an address or truck name!
+                        if (doc.get("Review") != "" && doc.get("Truck Name") != "") {
+                            // System.out.println(doc.get("Truck Name:").toString() + "");
+                            tmpReviews.append("Review: ").append(doc.get("Review"));
+                            tmpTrucks.append("Truck Name: ").append(doc.get("Truck Name"));
+                            reviews = tmpReviews.toString();
+                            reviews = reviews.substring(7);
+                            System.out.println(reviews);
+                            reviewsOfFoodTrucks.add(reviews);
+                            reviewedTruck = tmpTrucks.toString();
+                            reviewedTruck = reviewedTruck.substring(12);
+                            System.out.println(reviewedTruck);
+                            truckNamesReviewed.add(reviewedTruck);
+                        } else {
+                            System.out.println("Either the truck has no address or no name... skip and proceed");
+                            continue;
+                        }
+
+                        // fields.append(" Truck Name: ").append(doc.get("Truck Name"))
+                    }
+
+                }
+
+                for (int j = 0; j < mapMarkers.size(); j++) {
+                    for (int k = 0; k < truckNamesReviewed.size(); k++) {
+                        if (mapMarkers.get(j).getTitle().equals(truckNamesReviewed.get(k))) {
+                            mapMarkers.get(j).setSnippet(reviewsOfFoodTrucks.get(k));
+                            System.out.println("FOUND A MATCH... PRINTING NOW...");
+                        }
+                    }
+                }
+            }
+        });
     }
 
 }
