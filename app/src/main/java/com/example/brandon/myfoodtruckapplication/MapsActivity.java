@@ -35,7 +35,6 @@ import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    // Add Comment to Test GitHub in Fedora
 
     private GoogleMap mMap;
     private String addressForMarker;
